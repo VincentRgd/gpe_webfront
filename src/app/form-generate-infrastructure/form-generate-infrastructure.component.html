@@ -1,0 +1,50 @@
+<div class="col-sm-8 col-sm-offset-2">
+  <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
+
+    <h2>Vos machines</h2>
+    <div formArrayName="machines" class="form-group" *ngFor="let machine of getMachines().controls; let i = index">
+      <div [formGroupName]="i">
+        <h3>Machine {{ i + 1}}</h3>
+        <div class="form-group">
+          <label for="type">Type de la machine</label>
+          <select formControlName="type" id="type" class="form-control" (change)="onTypeChange(i)">
+            <option *ngFor="let typeMachine of getTypeOptions()" [value]="typeMachine"> {{ typeMachine }}</option>
+          </select>
+        </div>
+        <div class="form-group" *ngIf="getMachine(i).type">
+          <label for="os">Choix de l'OS</label>
+          <select formControlName="os" id="os" class="form-control" [ngModel]="getOSOptions(getMachine(i).type)[0]">
+            <option *ngFor="let osMachine of getOSOptions(getMachine(i).type)"
+                    [value]="osMachine">{{osMachine}}</option>
+          </select>
+        </div>
+        <div class="form-group" *ngIf="getMachine(i).type == 'Domain controller'">
+          <label for="domain_name">Nom de domaine</label>
+          <input type="text" class="form-control" id="domain_name" formControlName="domain_name">
+        </div>
+        <div class="form-group">
+          <label for="ip">Ip de la machine</label>
+          <input type="text" class="form-control" id="ip" formControlName="ip">
+        </div>
+        <div class="form-group">
+          <label for="mask">Netmask</label>
+          <input type="text" class="form-control" id="mask" formControlName="mask">
+        </div>
+        <div class="form-group">
+          <label for="gateway">Gateway</label>
+          <input type="text" class="form-control" id="gateway" formControlName="gateway">
+        </div>
+        <button class="btn btn-danger" type="button" (click)="onRemoveMachine(i)" [disabled]="getMachines().length <= 1">Supprimer ma machine</button>
+      </div>
+    </div>
+    <button class="btn btn-success" type="button" (click)="onAddMachine()">Ajouter une machine</button>
+    <!--    <div formArrayName="hobbies">-->
+    <!--      <h3>Vos hobbies</h3>-->
+    <!--      <div class="form-group" *ngFor="let hobbyControl of getHobbies().controls; let i = index">-->
+    <!--        <input type="text" class="form-control" [formControlName]="i"/>-->
+    <!--      </div>-->
+    <!--      <button class="btn btn-success" type="button" (click)="onAddHooby()">Ajouter un hobby</button>-->
+    <!--    </div>-->
+    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Soumettre</button>
+  </form>
+</div>
